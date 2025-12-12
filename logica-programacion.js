@@ -7,6 +7,8 @@
  * - Múltiplos de 3 y de 5 a la vez por la palabra "fizzbuzz".
  */
 
+const { Console } = require("console");
+
 function fizzbuzz() {
   for (let i = 1; i <= 100; i++) {
     if (i % 3 == 0 && i % 5 == 0) {
@@ -361,7 +363,6 @@ function palindromo(texto) {
   return textoLimpio === textoReversido ? true : false;
 }
 
-
 /*
  * Escribe una función que calcule y retorne el factorial de un número dado
  * de forma recursiva.
@@ -369,7 +370,7 @@ function palindromo(texto) {
 
 function factorial(numero) {
   if (numero === 0) return 1;
-  return numero * factorial(numero - 1);  
+  return numero * factorial(numero - 1);
 }
 
 /*
@@ -387,9 +388,8 @@ function esArmstrong(numero) {
   }
   if (armstrong !== numero) return false;
 
-  return true
+  return true;
 }
-
 
 /*
  * Crea una función que calcule y retorne cuántos días hay entre dos cadenas
@@ -414,22 +414,20 @@ function diasEntreFechas(fecha1, fecha2) {
 
   let dias = 0;
 
-  if(año1 !== año2) {
-    if(año1 > año2) {
+  if (año1 !== año2) {
+    if (año1 > año2) {
       return console.log("El año 1 es posterior al año 2");
     }
     dias += Number(año2 - año1) * 365;
-
   }
-  
+
   if (mes1 !== mes2) {
     if (mes1 > mes2) {
       return console.log("El mes 1 es posterior al mes 2");
     }
     dias += Number(mes2 - mes1) * 30;
+  }
 
-  } 
-  
   if (dia1 !== dia2) {
     if (dia1 > dia2) {
       return console.log("El dia 1 es posterior al dia 2");
@@ -440,4 +438,212 @@ function diasEntreFechas(fecha1, fecha2) {
   return "Hay " + dias + " días entre " + fecha1Array + " y " + fecha2Array;
 }
 
-console.log(diasEntreFechas("01/01/2020", "31/01/2020"));
+/*
+ * Crea una función que reciba un String de cualquier tipo y se encargue de
+ * poner en mayúscula la primera letra de cada palabra.
+ * - No se pueden utilizar operaciones del lenguaje que
+ *   lo resuelvan directamente.
+ */
+
+function mayusculas(texto) {
+  return texto.toUpperCase();
+}
+
+/*
+ * Crea una función que evalúe si un/a atleta ha superado correctamente una
+ * carrera de obstáculos.
+ * - La función recibirá dos parámetros:
+ *      - Un array que sólo puede contener String con las palabras
+ *        "run" o "jump"
+ *      - Un String que represente la pista y sólo puede contener "_" (suelo)
+ *        o "|" (valla)
+ * - La función imprimirá cómo ha finalizado la carrera:
+ *      - Si el/a atleta hace "run" en "_" (suelo) y "jump" en "|" (valla)
+ *        será correcto y no variará el símbolo de esa parte de la pista.
+ *      - Si hace "jump" en "_" (suelo), se variará la pista por "x".
+ *      - Si hace "run" en "|" (valla), se variará la pista por "/".
+ * - La función retornará un Boolean que indique si ha superado la carrera.
+ * Para ello tiene que realizar la opción correcta en cada tramo de la pista.
+ */
+
+function carrera(tramos, pista) {
+  let correcto = true;
+  for (let i = 0; i < tramos.length; i++) {
+    if (tramos[i] === "run") {
+      if (pista[i] === "|") {
+        pista = pista.replace("|", "/");
+        correcto = false;
+      }
+    } else if (tramos[i] === "jump") {
+      if (pista[i] === "_") {
+        pista = pista.replace("_", "x");
+        correcto = false;
+      }
+    }
+  }
+  console.log(pista);
+  return correcto;
+}
+
+/*
+ * Crea una función que analice una matriz 3x3 compuesta por "X" y "O"
+ * y retorne lo siguiente:
+ * - "X" si han ganado las "X"
+ * - "O" si han ganado los "O"
+ * - "Empate" si ha habido un empate
+ * - "Nulo" si la proporción de "X", de "O", o de la matriz no es correcta.
+ *   O si han ganado los 2.
+ * Nota: La matriz puede no estar totalmente cubierta.
+ * Se podría representar con un vacío "", por ejemplo.
+ */
+
+function analizarMatriz(matriz) {
+  let n = matriz.length;
+  for (let i = 0; i < n; i++) {
+    if (
+      matriz[i][0] !== null &&
+      matriz[i][0] === matriz[i][1] &&
+      matriz[i][1] === matriz[i][2]
+    )
+      return matriz[0][1] + " ganó";
+  }
+
+  for (let j = 0; j < n; j++) {
+    if (
+      matriz[0][j] !== null &&
+      matriz[0][j] === matriz[1][j] &&
+      matriz[1][j] === matriz[2][j]
+    )
+      return matriz[1][0] + " ganó";
+  }
+
+  if (matriz[0][0] === matriz[1][1] && matriz[1][1] === matriz[2][2])
+    return matriz[1][1] + " ganó";
+  if (matriz[0][2] === matriz[1][1] && matriz[1][1] === matriz[2][0])
+    return matriz[1][1] + " ganó";
+
+  return "Empate";
+}
+
+/*
+ * Crea una función que reciba días, horas, minutos y segundos (como enteros)
+ * y retorne su resultado en milisegundos.
+ */
+
+function segundos(dias, horas, minutos, segundos) {
+  let ms =
+    dias * 86400000 + horas * 3600000 + minutos * 60000 + segundos * 1000;
+
+  return "Hay un total de " + ms + " ms";
+}
+
+/*
+ * Crea una función que sume 2 números y retorne su resultado pasados
+ * unos segundos.
+ * - Recibirá por parámetros los 2 números a sumar y los segundos que
+ *   debe tardar en finalizar su ejecución.
+ * - Si el lenguaje lo soporta, deberá retornar el resultado de forma
+ *   asíncrona, es decir, sin detener la ejecución del programa principal.
+ *   Se podría ejecutar varias veces al mismo tiempo.
+ */
+
+function parandoElTiempo(num, num2, seg) {
+  return new Promise((res) => {
+    console.log("Sumando...");
+    setTimeout(() => {
+      const suma = num + num2;
+      res(suma);
+    }, seg * 1000);
+  });
+}
+
+// parandoElTiempo(5, 7, 2).then((suma) => {
+//   console.log("La suma es:", suma);
+// });
+
+/*
+ * Lee el fichero "Calculator.txt" incluido en el proyecto, calcula su
+ * resultado e imprímelo.
+ * - El .txt se corresponde con las entradas de una calculadora.
+ * - Cada línea tendrá un número o una operación representada por un
+ *   símbolo (alternando ambos).
+ * - Soporta números enteros y decimales.
+ * - Soporta las operaciones suma "+", resta "-", multiplicación "*"
+ *   y división "/".
+ * - El resultado se muestra al finalizar la lectura de la última
+ *   línea (si el .txt es correcto).
+ * - Si el formato del .txt no es correcto, se indicará que no se han
+ *   podido resolver las operaciones.
+ */
+
+const fs = require("fs");
+
+function calculadoraTxT() {
+  try {
+    const contenido = fs.readFileSync("Calculator.txt", "utf-8");
+
+    const lineas = contenido
+      .trim()
+      .split("\n")
+      .map((linea) => linea.trim())
+      .filter((linea) => linea !== "");
+
+    if (lineas.length === 0) {
+      console.log("El archivo está vacío o no tiene operaciones válidas");
+      return;
+    }
+
+    if (isNaN(Number(lineas[0]))) {
+      console.log("La primera linea debe ser un numero");
+      return;
+    }
+
+    let resultado = parseFloat(lineas[0]);
+
+    for (let i = 1; i < lineas.length; i += 2) {
+      const operacion = lineas[i];
+      const sigNumStr = lineas[i + 1];
+
+      if (!sigNumStr) {
+        console.log("Falta un número despúes de la operación", operacion);
+        return;
+      }
+
+      const numero = parseFloat(sigNumStr);
+
+      if (isNaN(numero)) {
+        console.log(
+          "Formato incorrecto, se esperaba un número, se encontró: ",
+          sigNumStr
+        );
+        return;
+      }
+
+      switch (operacion) {
+        case "+":
+          resultado += numero;
+          break;
+        case "-":
+          resultado -= numero;
+          break;
+        case "*":
+          resultado *= numero;
+          break;
+        case "/":
+          if (numero === 0) {
+            console.log("No se puede dividir entre 0");
+            return;
+          }
+          resultado /= numero;
+          break;
+        default:
+          console.log("Operacion no soportada", operacion);
+          return;
+      }
+    }
+    console.log("El resultado es: ", resultado);
+  } catch (error) {
+    console.log("No se han podido resolver las operaciones.");
+    console.log("Error:", error.message);
+  }
+}
